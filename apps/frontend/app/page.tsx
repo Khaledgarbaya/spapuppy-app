@@ -1,4 +1,4 @@
-import Dashboard from "@repo/ui/components/Dashboard";
+import Dashboard from '@repo/ui/components/Dashboard';
 
 export default function Home() {
   return (
