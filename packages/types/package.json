@@ -1,0 +1,13 @@
+{
+  "name": "@repo/types",
+  "version": "1.0.0",
+  "main": "./index.js",
+  "types": "./index.ts",
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "typescript": "latest"
+  }
+}
