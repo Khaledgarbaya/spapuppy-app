@@ -1,14 +1,17 @@
 "use client";
 
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Puppy, PuppyStatus } from "@repo/types";
 import { useToast } from "@repo/ui/hooks/use-toast";
+import { format } from "date-fns";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:12345";
 
 interface WaitingListContextType {
   puppyList: Puppy[];
+  selectedDate: Date;
+  setSelectedDate: (date: Date) => void;
   addPuppy: (puppy: Omit<Puppy, "id" | "status" | "arrivalTime">) => void;
   updatePuppyStatus: (id: string, status: PuppyStatus) => void;
   updatePuppyPosition: (fromIndex: number, toIndex: number) => void;
@@ -23,21 +26,26 @@ const WaitingListContext = createContext<WaitingListContextType | undefined>(und
 export const WaitingListProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
-  // Fetch puppies from API
-  const { data: puppyList = [], isLoading } = useQuery({
-    queryKey: ["puppies"],
+  // Fetch waiting list from API
+  const { data: waitingList, isLoading } = useQuery({
+    queryKey: ["waiting-list", format(selectedDate, "yyyy-MM-dd")],
     queryFn: async () => {
-      const response = await fetch(`${API_BASE_URL}/puppies`);
-      if (!response.ok) throw new Error("Failed to fetch puppies");
+      const formattedDate = format(selectedDate, "yyyy-MM-dd");
+      const response = await fetch(`${API_BASE_URL}/waiting-list/by-date?date=${formattedDate}`);
+      if (!response.ok) throw new Error("Failed to fetch waiting list");
       return response.json();
     },
   });
+
+  const puppyList = waitingList?.puppies || [];
 
   // Mutation for adding a puppy
   const addPuppyMutation = useMutation({
     mutationFn: async (puppy: Omit<Puppy, "id" | "status" | "arrivalTime">) => {
       const now = new Date();
+      const formattedDate = format(selectedDate, "yyyy-MM-dd");
       const newPuppy = {
         ...puppy,
         status: "waiting" as PuppyStatus,
@@ -45,6 +53,7 @@ export const WaitingListProvider: React.FC<{ children: React.ReactNode }> = ({ c
           hour: "2-digit",
           minute: "2-digit",
         }),
+        date: formattedDate,
       };
 
       const response = await fetch(`${API_BASE_URL}/puppies`, {
@@ -56,7 +65,8 @@ export const WaitingListProvider: React.FC<{ children: React.ReactNode }> = ({ c
       return response.json();
     },
     onSuccess: (newPuppy) => {
-      queryClient.setQueryData(["puppies"], (old: Puppy[] = []) => [...old, newPuppy]);
+      const formattedDate = format(selectedDate, "yyyy-MM-dd");
+      queryClient.invalidateQueries({ queryKey: ["waiting-list", formattedDate] });
       toast({
         title: "Puppy Added",
         description: `${newPuppy.name} has been added to the waiting list.`,
@@ -67,18 +77,18 @@ export const WaitingListProvider: React.FC<{ children: React.ReactNode }> = ({ c
   // Mutation for updating puppy status
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: PuppyStatus }) => {
+      const formattedDate = format(selectedDate, "yyyy-MM-dd");
       const response = await fetch(`${API_BASE_URL}/puppies/${id}/status`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({ status, date: formattedDate }),
       });
       if (!response.ok) throw new Error("Failed to update status");
       return response.json();
     },
     onSuccess: (updatedPuppy) => {
-      queryClient.setQueryData(["puppies"], (old: Puppy[] = []) =>
-        old.map((p) => (p.id === updatedPuppy.id ? updatedPuppy : p))
-      );
+      const formattedDate = format(selectedDate, "yyyy-MM-dd");
+      queryClient.invalidateQueries({ queryKey: ["waiting-list", formattedDate] });
       toast({
         title: `Status Updated: ${updatedPuppy.status.replace("-", " ")}`,
         description: `${updatedPuppy.name}'s status has been updated.`,
@@ -89,16 +99,18 @@ export const WaitingListProvider: React.FC<{ children: React.ReactNode }> = ({ c
   // Mutation for reordering puppies
   const updatePositionMutation = useMutation({
     mutationFn: async ({ id, position }: { id: string; position: number }) => {
+      const formattedDate = format(selectedDate, "yyyy-MM-dd");
       const response = await fetch(`${API_BASE_URL}/puppies/${id}/position`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ position }),
+        body: JSON.stringify({ position, date: formattedDate }),
       });
       if (!response.ok) throw new Error("Failed to update position");
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["puppies"] });
+      const formattedDate = format(selectedDate, "yyyy-MM-dd");
+      queryClient.invalidateQueries({ queryKey: ["waiting-list", formattedDate] });
       toast({
         title: "List Reordered",
         description: "The waiting list order has been updated.",
@@ -109,16 +121,18 @@ export const WaitingListProvider: React.FC<{ children: React.ReactNode }> = ({ c
   // Mutation for removing a puppy
   const removePuppyMutation = useMutation({
     mutationFn: async (id: string) => {
+      const formattedDate = format(selectedDate, "yyyy-MM-dd");
       const response = await fetch(`${API_BASE_URL}/puppies/${id}`, {
         method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date: formattedDate }),
       });
       if (!response.ok) throw new Error("Failed to remove puppy");
       return response.json();
     },
     onSuccess: (removedPuppy) => {
-      queryClient.setQueryData(["puppies"], (old: Puppy[] = []) =>
-        old.filter((p) => p.id !== removedPuppy.id)
-      );
+      const formattedDate = format(selectedDate, "yyyy-MM-dd");
+      queryClient.invalidateQueries({ queryKey: ["waiting-list", formattedDate] });
       toast({
         title: "Puppy Removed",
         description: `${removedPuppy.name} has been removed from the waiting list.`,
@@ -156,7 +170,6 @@ export const WaitingListProvider: React.FC<{ children: React.ReactNode }> = ({ c
       return status ? getFilteredPuppies(status) : puppyList;
     }
 
-    // For now, we'll do client-side search until we implement server-side search
     const lowerCaseSearch = searchTerm.toLowerCase().trim();
     const statusFiltered = status ? getFilteredPuppies(status) : puppyList;
 
@@ -176,6 +189,8 @@ export const WaitingListProvider: React.FC<{ children: React.ReactNode }> = ({ c
     <WaitingListContext.Provider
       value={{
         puppyList,
+        selectedDate,
+        setSelectedDate,
         addPuppy,
         updatePuppyStatus,
         updatePuppyPosition,

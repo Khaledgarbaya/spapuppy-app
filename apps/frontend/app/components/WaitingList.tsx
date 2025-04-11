@@ -117,7 +117,7 @@ export default function WaitingList() {
         <TabsList className="grid grid-cols-5 mb-4">
           <TabsTrigger value="all">All</TabsTrigger>
           <TabsTrigger value="waiting">Waiting</TabsTrigger>
-          <TabsTrigger value="in-service">In Service</TabsTrigger>
+          <TabsTrigger value="in_progress">In Service</TabsTrigger>
           <TabsTrigger value="completed">Completed</TabsTrigger>
           <TabsTrigger value="cancelled">Cancelled</TabsTrigger>
         </TabsList>

@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common';
 import { PuppyService } from './puppy.service';
-import { Puppy } from 'generated/prisma';
-
+import { Puppy } from '@prisma/client';
 @Controller('puppies')
 export class PuppyController {
   constructor(private readonly puppyService: PuppyService) {}

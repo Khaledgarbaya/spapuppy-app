@@ -8,8 +8,8 @@ export default function PuppyCard({puppy}: {puppy: Puppy}) {
   console.log(puppy);
   const handleStatusChange = () => {
     if (puppy.status === "waiting") {
-      updatePuppyStatus(puppy.id, "in-service");
-    } else if (puppy.status === "in-service") {
+      updatePuppyStatus(puppy.id, "in_progress");
+    } else if (puppy.status === "in_progress") {
       updatePuppyStatus(puppy.id, "completed");
     }
   };
@@ -56,7 +56,7 @@ export default function PuppyCard({puppy}: {puppy: Puppy}) {
         </div>
         <div>
           <p className="text-sm text-gray-500">Status</p>
-          <p className="text-sm capitalize">{puppy.status?.replace("-", " ")}</p>
+          <p className="text-sm capitalize">{puppy.status?.replace("_", " ")}</p>
         </div>
       </div>
 

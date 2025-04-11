@@ -19,4 +19,4 @@ export type Service =
   | "Full Grooming"
   | "Wash & Blow Dry";
 
-export type PuppyStatus = "waiting" | "in-service" | "completed" | "cancelled";
+export type PuppyStatus = "waiting" | "in_progress" | "completed" | "cancelled";
