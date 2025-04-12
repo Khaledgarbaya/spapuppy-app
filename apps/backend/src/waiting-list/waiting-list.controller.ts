@@ -23,4 +23,4 @@ export class WaitingListController {
     date.setHours(0, 0, 0, 0);
     return this.waitingListService.createNewList(date);
   }
-} 
+}

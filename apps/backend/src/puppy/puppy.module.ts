@@ -10,4 +10,4 @@ import { WaitingListModule } from '../waiting-list/waiting-list.module';
   providers: [PuppyService],
   exports: [PuppyService],
 })
-export class PuppyModule {} 
+export class PuppyModule {}

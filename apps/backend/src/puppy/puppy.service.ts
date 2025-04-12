@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { WaitingListService } from '../waiting-list/waiting-list.service';
-import { Puppy } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PuppyService {
@@ -10,28 +10,27 @@ export class PuppyService {
     private waitingListService: WaitingListService,
   ) {}
 
-  async findAll(status?: string): Promise<Puppy[]> {
+  async findAll(status?: string): Promise<Prisma.PuppyWhereInput> {
     const todayList = await this.waitingListService.getOrCreateTodayList();
-    
-    if (status) {
-      return this.prisma.puppy.findMany({
-        where: { 
-          status,
-          waitingListId: todayList.id,
-        },
-        orderBy: { position: 'asc' },
-      });
-    }
+
+    const where: Prisma.PuppyWhereInput = {
+      waitingListId: todayList.id,
+      ...(status ? { status } : {}),
+    };
+
     return this.prisma.puppy.findMany({
-      where: { waitingListId: todayList.id },
+      where,
       orderBy: { position: 'asc' },
     });
   }
 
-  async search(searchTerm: string, status?: string): Promise<Puppy[]> {
+  async search(
+    searchTerm: string,
+    status?: string,
+  ): Promise<Prisma.PuppyWhereInput> {
     const todayList = await this.waitingListService.getOrCreateTodayList();
-    
-    const where: any = {
+
+    const where: Prisma.PuppyWhereInput = {
       waitingListId: todayList.id,
       OR: [
         { name: { contains: searchTerm, mode: 'insensitive' } },
@@ -41,11 +40,8 @@ export class PuppyService {
         { service: { contains: searchTerm, mode: 'insensitive' } },
         { notes: { contains: searchTerm, mode: 'insensitive' } },
       ],
+      ...(status ? { status } : {}),
     };
-
-    if (status) {
-      where.status = status;
-    }
 
     return this.prisma.puppy.findMany({
       where,
@@ -53,17 +49,22 @@ export class PuppyService {
     });
   }
 
-  async create(data: Omit<Puppy, 'id' | 'createdAt' | 'updatedAt' | 'waitingListId'>): Promise<Puppy> {
+  async create(
+    data: Omit<
+      Prisma.PuppyCreateInput,
+      'id' | 'createdAt' | 'updatedAt' | 'waitingListId'
+    >,
+  ): Promise<Prisma.PuppyCreateInput> {
     const todayList = await this.waitingListService.getOrCreateTodayList();
-    
+
     // Get the current highest position
     const lastPuppy = await this.prisma.puppy.findFirst({
       where: { waitingListId: todayList.id },
       orderBy: { position: 'desc' },
     });
-    
+
     const position = lastPuppy ? lastPuppy.position + 1 : 0;
-    
+
     return this.prisma.puppy.create({
       data: {
         ...data,
@@ -73,9 +74,12 @@ export class PuppyService {
     });
   }
 
-  async updateStatus(id: string, status: string): Promise<Puppy> {
+  async updateStatus(
+    id: string,
+    status: string,
+  ): Promise<Prisma.PuppyUpdateInput> {
     const data: any = { status };
-    
+
     if (status === 'in_progress') {
       data.serviceStartTime = new Date().toLocaleTimeString();
     } else if (status === 'completed') {
@@ -88,9 +92,12 @@ export class PuppyService {
     });
   }
 
-  async updatePosition(id: string, newPosition: number): Promise<Puppy> {
+  async updatePosition(
+    id: string,
+    newPosition: number,
+  ): Promise<Prisma.PuppyUpdateInput> {
     const todayList = await this.waitingListService.getOrCreateTodayList();
-    
+
     // Get the puppy to be moved
     const puppy = await this.prisma.puppy.findUnique({
       where: { id },
@@ -144,9 +151,9 @@ export class PuppyService {
     });
   }
 
-  async remove(id: string): Promise<Puppy> {
+  async remove(id: string): Promise<Prisma.PuppyDeleteInput> {
     const todayList = await this.waitingListService.getOrCreateTodayList();
-    
+
     // Get the puppy to be removed
     const puppy = await this.prisma.puppy.findUnique({
       where: { id },
@@ -176,4 +183,4 @@ export class PuppyService {
       where: { id },
     });
   }
-} 
+}

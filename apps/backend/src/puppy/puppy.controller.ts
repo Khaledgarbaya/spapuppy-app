@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { PuppyService } from './puppy.service';
 import { Puppy } from '@prisma/client';
 @Controller('puppies')
@@ -19,7 +28,9 @@ export class PuppyController {
   }
 
   @Post()
-  async create(@Body() data: Omit<Puppy, 'id' | 'createdAt' | 'updatedAt'>): Promise<Puppy> {
+  async create(
+    @Body() data: Omit<Puppy, 'id' | 'createdAt' | 'updatedAt'>,
+  ): Promise<Puppy> {
     return this.puppyService.create(data);
   }
 
@@ -43,4 +54,4 @@ export class PuppyController {
   async remove(@Param('id') id: string): Promise<Puppy> {
     return this.puppyService.remove(id);
   }
-} 
+}

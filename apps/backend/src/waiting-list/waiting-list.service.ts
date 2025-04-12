@@ -48,8 +48,10 @@ export class WaitingListService {
       return newList;
     } catch (error) {
       // If the error is a unique constraint violation
-      if (error?.constructor?.name === 'PrismaClientKnownRequestError' && 
-          (error as any).code === 'P2002') {
+      if (
+        error?.constructor?.name === 'PrismaClientKnownRequestError' &&
+        (error as any).code === 'P2002'
+      ) {
         // Return the existing list for that date
         const existingList = await this.prisma.waitingList.findUnique({
           where: { date },
@@ -61,7 +63,9 @@ export class WaitingListService {
         });
 
         if (!existingList) {
-          throw new ConflictException('Failed to create or retrieve waiting list');
+          throw new ConflictException(
+            'Failed to create or retrieve waiting list',
+          );
         }
 
         return existingList;
@@ -80,4 +84,4 @@ export class WaitingListService {
       },
     });
   }
-} 
+}

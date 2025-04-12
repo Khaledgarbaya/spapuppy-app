@@ -9,4 +9,4 @@ import { PrismaModule } from '../prisma/prisma.module';
   providers: [WaitingListService],
   exports: [WaitingListService],
 })
-export class WaitingListModule {} 
+export class WaitingListModule {}
