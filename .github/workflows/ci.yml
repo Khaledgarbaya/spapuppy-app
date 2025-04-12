@@ -49,4 +49,4 @@ jobs:
         run: pnpm exec playwright install --with-deps
 
       - name: Run E2E tests
-        run: pnpm dlx playwright@1.42.1 test --config=apps/frontend/playwright.config.ts
+        run: pnpm run test:e2e
