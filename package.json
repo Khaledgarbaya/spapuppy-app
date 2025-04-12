@@ -21,21 +21,10 @@
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
     "clean": "turbo clean && rm -rf node_modules",
-    "changeset": "changeset",
-    "version-packages": "changeset version",
-    "release": "turbo build --filter=docs^... && changeset publish",
     "ui:add:component": "turbo ui:add --filter=@repo/ui --",
-    "storybook": "turbo dev --filter=@repo/storybook",
-    "build:storybook": "turbo build --filter=@repo/storybook",
     "test": "turbo test",
     "test:build": "turbo test:with-build",
-    "test:e2e": "turbo test:e2e",
-    "test:e2e:watch": "turbo test:e2e -- --headed",
-    "test:e2e:debug": "turbo test:e2e -- --debug",
-    "test:e2e:build": "turbo test:e2e:with-build",
-    "test:ui": "turbo test -- --ui",
-    "test:cov": "turbo test:cov",
-    "test:cov:ui": "turbo test:cov:ui"
+    "test:e2e": "turbo test:e2e"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",

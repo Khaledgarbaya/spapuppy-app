@@ -27,47 +27,54 @@ spapuppy-app/
 ## Getting Started
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/Khaledgarbaya/spapuppy-app.git
 cd spapuppy-app
 ```
 
-2. Install dependencies:
+2.Install dependencies:
+
 ```bash
 pnpm install
 ```
 
-3. Set up environment variables:
+3.Set up environment variables:
 
 Create `.env` files in both frontend and backend apps:
 
 For `apps/frontend/.env`:
+
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:12345
 ```
 
 For `apps/backend/.env`:
+
 ```env
 DATABASE_URL="./dev.db"
 FRONTEND_URL="http://localhost:3001"
 PORT=12345
 ```
 
-4. Set up the database:
+4.Set up the database:
+
 ```bash
 cd apps/backend
-pnpm prisma generate  # Generate Prisma client
-pnpm prisma migrate dev  # Run migrations
-pnpm prisma db seed  # Seed the database with initial data
+pnpm exec prisma generate  # Generate Prisma client
+pnpm exec prisma migrate dev  # Run migrations
+pnpm exec prisma db seed  # Seed the database with initial data
 ```
 
-5. Start the development servers:
+5.Start the development servers:
+
 ```bash
 # From the root directory
 pnpm dev  # This will start both frontend and backend
 ```
 
 The application will be available at:
+
 - Frontend: http://localhost:3001
 - Backend API: http://localhost:12345
 
@@ -89,9 +96,9 @@ pnpm add <dependency> -w
 - `pnpm build` - Build all applications
 - `pnpm test` - Run all tests
 - `pnpm test:e2e` - Run end-to-end tests
-- `pnpm test:e2e:watch` - Run end-to-end tests in watch mode with UI
 - `pnpm lint` - Lint all files
 - `pnpm lint:fix` - Lint and fix all files
+- `pnpm ui:add:component` - Add a new component to the UI
 
 ### Frontend (apps/frontend)
 
@@ -106,9 +113,6 @@ pnpm add <dependency> -w
 - `pnpm dev` - Start the backend development server
 - `pnpm build` - Build the backend application
 - `pnpm start` - Start the production server
-- `pnpm prisma:generate` - Generate Prisma client
-- `pnpm prisma:migrate` - Run database migrations
-- `pnpm prisma:seed` - Seed the database
 - `pnpm test` - Run backend tests
 
 ## Development
