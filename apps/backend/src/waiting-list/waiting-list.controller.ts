@@ -17,6 +17,13 @@ export class WaitingListController {
     return this.waitingListService.getListByDate(date);
   }
 
+  @Get('exists')
+  async doesListExist(@Query('date') dateStr: string) {
+    const date = new Date(dateStr);
+    date.setHours(0, 0, 0, 0);
+    return this.waitingListService.doesListExist(date);
+  }
+
   @Post('new')
   async createNewList(@Query('date') dateStr?: string) {
     const date = dateStr ? new Date(dateStr) : new Date();

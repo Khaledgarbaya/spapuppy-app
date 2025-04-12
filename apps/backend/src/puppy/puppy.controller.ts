@@ -9,13 +9,14 @@ import {
   Query,
 } from '@nestjs/common';
 import { PuppyService } from './puppy.service';
-import { Puppy } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+
 @Controller('puppies')
 export class PuppyController {
   constructor(private readonly puppyService: PuppyService) {}
 
   @Get()
-  async findAll(@Query('status') status?: string): Promise<Puppy[]> {
+  async findAll(@Query('status') status?: string): Promise<Prisma.PuppyGetPayload<{}>[]> {
     return this.puppyService.findAll(status);
   }
 
@@ -23,14 +24,14 @@ export class PuppyController {
   async search(
     @Query('term') searchTerm: string,
     @Query('status') status?: string,
-  ): Promise<Puppy[]> {
+  ): Promise<Prisma.PuppyGetPayload<{}>[]> {
     return this.puppyService.search(searchTerm, status);
   }
 
   @Post()
   async create(
-    @Body() data: Omit<Puppy, 'id' | 'createdAt' | 'updatedAt'>,
-  ): Promise<Puppy> {
+    @Body() data: Omit<Prisma.PuppyCreateInput, 'id' | 'createdAt' | 'updatedAt' | 'waitingList' | 'date'>,
+  ): Promise<Prisma.PuppyGetPayload<{}>> {
     return this.puppyService.create(data);
   }
 
@@ -38,7 +39,7 @@ export class PuppyController {
   async updateStatus(
     @Param('id') id: string,
     @Body('status') status: string,
-  ): Promise<Puppy> {
+  ): Promise<Prisma.PuppyGetPayload<{}>> {
     return this.puppyService.updateStatus(id, status);
   }
 
@@ -46,12 +47,12 @@ export class PuppyController {
   async updatePosition(
     @Param('id') id: string,
     @Body('position') position: number,
-  ): Promise<Puppy> {
+  ): Promise<Prisma.PuppyGetPayload<{}>> {
     return this.puppyService.updatePosition(id, position);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<Puppy> {
+  async remove(@Param('id') id: string): Promise<Prisma.PuppyGetPayload<{}>> {
     return this.puppyService.remove(id);
   }
 }

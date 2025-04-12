@@ -19,6 +19,7 @@ interface WaitingListContextType {
   getFilteredPuppies: (status?: PuppyStatus) => Puppy[];
   searchPuppies: (searchTerm: string, status?: PuppyStatus) => Puppy[];
   isLoading: boolean;
+  listExists: boolean;
 }
 
 const WaitingListContext = createContext<WaitingListContextType | undefined>(undefined);
@@ -39,13 +40,22 @@ export const WaitingListProvider: React.FC<{ children: React.ReactNode }> = ({ c
     },
   });
 
+  const { data: listExists } = useQuery({
+    queryKey: ["waiting-list-exists", format(selectedDate, "yyyy-MM-dd")],
+    queryFn: async () => {
+      const formattedDate = format(selectedDate, "yyyy-MM-dd");
+      const response = await fetch(`${API_BASE_URL}/waiting-list/exists?date=${formattedDate}`);
+      if (!response.ok) throw new Error("Failed to check if list exists");
+      return response.json();
+    },
+  });
+
   const puppyList = waitingList?.puppies || [];
 
   // Mutation for adding a puppy
   const addPuppyMutation = useMutation({
     mutationFn: async (puppy: Omit<Puppy, "id" | "status" | "arrivalTime">) => {
       const now = new Date();
-      const formattedDate = format(selectedDate, "yyyy-MM-dd");
       const newPuppy = {
         ...puppy,
         status: "waiting" as PuppyStatus,
@@ -53,7 +63,6 @@ export const WaitingListProvider: React.FC<{ children: React.ReactNode }> = ({ c
           hour: "2-digit",
           minute: "2-digit",
         }),
-        date: formattedDate,
       };
 
       const response = await fetch(`${API_BASE_URL}/puppies`, {
@@ -198,6 +207,7 @@ export const WaitingListProvider: React.FC<{ children: React.ReactNode }> = ({ c
         getFilteredPuppies,
         searchPuppies,
         isLoading,
+        listExists: listExists === true,
       }}
     >
       {children}

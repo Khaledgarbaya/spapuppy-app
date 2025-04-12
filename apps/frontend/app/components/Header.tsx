@@ -17,7 +17,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:12345"
 
 export default function Header() {
   const { toast } = useToast();
-  const { selectedDate, setSelectedDate, puppyList, isLoading } = useWaitingList();
+  const { selectedDate, setSelectedDate, puppyList, isLoading, listExists } = useWaitingList();
 
   const createNewList = async () => {
     try {
@@ -66,7 +66,7 @@ export default function Header() {
           variant="secondary"
           onClick={createNewList}
           className="bg-white text-puppy-purple-dark font-medium hover:bg-gray-100"
-          disabled={puppyList.length > 0 || isLoading}
+          disabled={listExists || isLoading}
         >
           New List
         </Button>

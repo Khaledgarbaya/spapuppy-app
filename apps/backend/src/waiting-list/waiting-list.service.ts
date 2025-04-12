@@ -84,4 +84,11 @@ export class WaitingListService {
       },
     });
   }
+
+  async doesListExist(date: Date) {
+    const list = await this.prisma.waitingList.findUnique({
+      where: { date },
+    });
+    return !!list;
+  }
 }
