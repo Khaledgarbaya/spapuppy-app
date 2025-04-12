@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@playwright/test": "1.45.3",
+    "@playwright/test": "^1.42.1",
     "@types/node": "^20",
     "@types/react": "^18.3.1",
     "@types/react-beautiful-dnd": "^13.1.8",
