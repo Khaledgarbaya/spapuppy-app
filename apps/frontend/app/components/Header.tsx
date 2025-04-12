@@ -13,11 +13,35 @@ import {
   PopoverTrigger,
 } from "@repo/ui/components/ui/popover";
 import { cn } from "@repo/ui/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:12345";
 
 export default function Header() {
   const { toast } = useToast();
   const { selectedDate, setSelectedDate, puppyList, isLoading, listExists } = useWaitingList();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Read date from URL on initial load
+  React.useEffect(() => {
+    const dateParam = searchParams.get('date');
+    if (dateParam) {
+      const date = new Date(dateParam);
+      if (!isNaN(date.getTime())) {
+        setSelectedDate(date);
+      }
+    }
+  }, [searchParams, setSelectedDate]);
+
+  const handleDateSelect = (date: Date | undefined) => {
+    if (date) {
+      setSelectedDate(date);
+      // Update URL with new date
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('date', format(date, 'yyyy-MM-dd'));
+      router.push(`?${params.toString()}`);
+    }
+  };
 
   const createNewList = async () => {
     try {
@@ -88,7 +112,7 @@ export default function Header() {
               <Calendar
                 mode="single"
                 selected={selectedDate}
-                onSelect={(date) => date && setSelectedDate(date)}
+                onSelect={handleDateSelect}
                 initialFocus
                 disabled={(date) => {
                   const today = new Date();
