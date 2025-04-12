@@ -49,6 +49,7 @@ NEXT_PUBLIC_API_URL=http://localhost:12345
 For `apps/backend/.env`:
 ```env
 DATABASE_URL="./dev.db"
+FRONTEND_URL="http://localhost:3001"
 PORT=12345
 ```
 
