@@ -28,7 +28,7 @@ const formSchema = z.object({
   name: z.string().min(1, { message: "Puppy name is required" }),
   breed: z.string().min(1, { message: "Breed is required" }),
   ownerName: z.string().min(1, { message: "Owner name is required" }),
-  ownerPhone: z.string().min(10, { message: "Valid phone number required" }),
+  ownerPhone: z.string().min(5, { message: "Please enter a valid phone number" }),
   service: z.enum([
     "Bath",
     "Haircut",
@@ -126,7 +126,7 @@ export default function AddPuppyForm() {
                 <FormItem>
                   <FormLabel>Owner Phone</FormLabel>
                   <FormControl>
-                    <Input placeholder="(555) 123-4567" {...field} />
+                    <Input placeholder="+1 (555) 123-4567" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

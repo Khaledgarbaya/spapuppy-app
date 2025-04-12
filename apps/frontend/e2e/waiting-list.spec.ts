@@ -163,7 +163,7 @@ test.describe('Waiting List', () => {
                   name: 'Max',
                   breed: 'Labrador',
                   ownerName: 'Jane Smith',
-                  ownerPhone: '(555) 123-4567',
+                  ownerPhone: '+44 20 7123 4567 ext. 123',
                   service: 'Full Grooming',
                   status: 'waiting',
                   waitingListId,
@@ -186,7 +186,7 @@ test.describe('Waiting List', () => {
     await page.getByLabel('Puppy Name').fill('Max');
     await page.getByLabel('Breed').fill('Labrador');
     await page.getByLabel('Owner Name').fill('Jane Smith');
-    await page.getByLabel('Owner Phone').fill('(555) 123-4567');
+    await page.getByLabel('Owner Phone').fill('+44 20 7123 4567 ext. 123');
     await page.getByLabel('Service').click();
     await page.getByRole('option', { name: 'Full Grooming' }).click();
     await page.getByLabel('Notes').fill('First visit');
