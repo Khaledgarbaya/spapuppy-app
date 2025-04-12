@@ -16,7 +16,6 @@ import {
   DragEndEvent,
 } from '@dnd-kit/core';
 import {
-  arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
@@ -39,11 +38,7 @@ export default function WaitingList() {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
-    if (over && active.id !== over.id) {
-      const waitingPuppies = getFilteredPuppies("waiting");
-      const oldIndex = waitingPuppies.findIndex(p => p.id === active.id);
-      const newIndex = waitingPuppies.findIndex(p => p.id === over.id);
-      
+    if (over && active.id !== over.id) {      
       // Get all puppies and find the actual indices in the full list
       const fullListOldIndex = puppyList.findIndex(p => p.id === active.id);
       const fullListNewIndex = puppyList.findIndex(p => p.id === over.id);
@@ -87,6 +82,7 @@ export default function WaitingList() {
             size="sm"
             onClick={() => setReorderMode(!reorderMode)}
             className="flex items-center gap-1"
+            data-testid="reorder-button"
           >
             {reorderMode ? "Done Reordering" : "Reorder List"}
           </Button>
@@ -124,7 +120,7 @@ export default function WaitingList() {
 
         <TabsContent value={activeTab} className="mt-0">
           {displayList.length === 0 ? (
-            <div className="text-center py-10 bg-muted rounded-lg">
+            <div className="text-center py-10 bg-muted rounded-lg" data-testid="empty-list">
               <p className="text-muted-foreground">
                 {searchTerm ? "No puppies match your search" : "No puppies in this category"}
               </p>
@@ -139,7 +135,7 @@ export default function WaitingList() {
                 items={waitingPuppies.map(p => p.id)}
                 strategy={verticalListSortingStrategy}
               >
-                <div className="space-y-4">
+                <div className="space-y-4" data-testid="puppy-list">
                   {waitingPuppies.map((puppy, index) => (
                     <SortablePuppyCard
                       key={puppy.id}
@@ -151,7 +147,7 @@ export default function WaitingList() {
               </SortableContext>
             </DndContext>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4" data-testid="puppy-list">
               {displayList.map((puppy) => (
                 <PuppyCard key={puppy.id} puppy={puppy} />
               ))}

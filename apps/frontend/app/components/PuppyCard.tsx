@@ -15,11 +15,11 @@ export default function PuppyCard({puppy}: {puppy: Puppy}) {
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border">
+    <div className="bg-white p-4 rounded-lg shadow-sm border" data-testid="puppy-card">
       <div className="flex justify-between items-start">
         <div>
-          <h3 className="text-lg font-semibold">{puppy.name}</h3>
-          <p className="text-sm text-gray-600">{puppy.breed}</p>
+          <h3 className="text-lg font-semibold" data-testid="puppy-name">{puppy.name}</h3>
+          <p className="text-sm text-gray-600" data-testid="puppy-breed">{puppy.breed}</p>
         </div>
         <div className="flex gap-2">
           {puppy.status !== "completed" && (
@@ -27,6 +27,7 @@ export default function PuppyCard({puppy}: {puppy: Puppy}) {
               onClick={handleStatusChange}
               variant="outline"
               className="text-sm"
+              data-testid="status-button"
             >
               {puppy.status === "waiting" ? "Start Service" : "Complete"}
             </Button>
@@ -35,6 +36,7 @@ export default function PuppyCard({puppy}: {puppy: Puppy}) {
             onClick={() => removePuppy(puppy.id)}
             variant="destructive"
             size="sm"
+            data-testid="remove-button"
           >
             Remove
           </Button>

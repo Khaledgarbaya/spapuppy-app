@@ -12,7 +12,7 @@ interface Props {
   index: number;
 }
 
-export function SortablePuppyCard({ puppy, index }: Props) {
+export function SortablePuppyCard({ puppy }: Props) {
   const {
     attributes,
     listeners,

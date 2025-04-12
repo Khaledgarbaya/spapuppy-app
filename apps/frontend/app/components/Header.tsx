@@ -48,6 +48,7 @@ export default function Header() {
         description: "Failed to create new waiting list",
         variant: "destructive",
       });
+      console.error(error);
     }
   };
 
