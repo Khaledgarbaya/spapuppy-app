@@ -115,6 +115,7 @@ test.describe('Waiting List', () => {
     const today = format(new Date(), 'yyyy-MM-dd');
     let addPuppyCalled = false;
     let waitingListCalled = false;
+    const waitingListId = 'test-waiting-list-id';
 
     // Mock the initial empty list
     await page.route(`**/waiting-list/by-date?date=${today}`, async (route) => {
@@ -122,7 +123,11 @@ test.describe('Waiting List', () => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify({ puppies: [] }),
+        body: JSON.stringify({ 
+          id: waitingListId,
+          date: today,
+          puppies: [] 
+        }),
       });
     });
 
@@ -139,7 +144,7 @@ test.describe('Waiting List', () => {
             ...body, 
             id: '1',
             status: 'waiting',
-            date: today,
+            waitingListId,
             arrivalTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
           }),
         });
@@ -150,6 +155,8 @@ test.describe('Waiting List', () => {
             status: 200,
             contentType: 'application/json',
             body: JSON.stringify({
+              id: waitingListId,
+              date: today,
               puppies: [
                 {
                   id: '1',
@@ -159,7 +166,7 @@ test.describe('Waiting List', () => {
                   ownerPhone: '(555) 123-4567',
                   service: 'Full Grooming',
                   status: 'waiting',
-                  date: today,
+                  waitingListId,
                   arrivalTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                 }
               ]
