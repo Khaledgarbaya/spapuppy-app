@@ -4,7 +4,7 @@
   "description": "UI",
   "private": true,
   "scripts": {
-    "ui:add": "pnpm dlx shadcn@latest add",
+    "ui:add": "pnpm dlx shadcn@latest add"
   },
   "license": "MIT",
   "devDependencies": {
