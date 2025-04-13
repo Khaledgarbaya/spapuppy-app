@@ -14,6 +14,14 @@ export default function PuppyCard({puppy}: {puppy: Puppy}) {
     }
   };
 
+  const handleCancel = () => {
+    if (puppy.status === "waiting") {
+      updatePuppyStatus(puppy.id, "cancelled");
+    } else if (puppy.status === "cancelled") {
+      updatePuppyStatus(puppy.id, "waiting");
+    }
+  };
+
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm border" data-testid="puppy-card">
       <div className="flex justify-between items-start">
@@ -22,7 +30,7 @@ export default function PuppyCard({puppy}: {puppy: Puppy}) {
           <p className="text-sm text-gray-600" data-testid="puppy-breed">{puppy.breed}</p>
         </div>
         <div className="flex gap-2">
-          {puppy.status !== "completed" && (
+          {puppy.status !== "completed" && puppy.status !== "cancelled" && (
             <Button
               onClick={handleStatusChange}
               variant="outline"
@@ -30,6 +38,16 @@ export default function PuppyCard({puppy}: {puppy: Puppy}) {
               data-testid="status-button"
             >
               {puppy.status === "waiting" ? "Start Service" : "Complete"}
+            </Button>
+          )}
+          {(puppy.status === "waiting" || puppy.status === "cancelled") && (
+            <Button
+              onClick={handleCancel}
+              variant={puppy.status === "cancelled" ? "outline" : "destructive"}
+              size="sm"
+              data-testid="cancel-button"
+            >
+              {puppy.status === "cancelled" ? "Uncancel" : "Cancel"}
             </Button>
           )}
           <Button
