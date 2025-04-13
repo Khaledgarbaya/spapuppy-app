@@ -2,6 +2,11 @@
 
 A modern web application for managing a pet grooming salon's waiting list, built with Next.js, Turborepo, and shadcn/ui.
 
+## TL;DR
+
+You can checkout this video for a quick overview of the project:
+[Youtube](https://youtu.be/_J9u1eEUzDc)
+
 ## Project Structure
 
 This is a monorepo using Turborepo with pnpm workspaces. The project is structured as follows:
@@ -52,7 +57,7 @@ NEXT_PUBLIC_API_URL=http://localhost:12345
 For `apps/backend/.env`:
 
 ```env
-DATABASE_URL="./dev.db"
+DATABASE_URL="file:./dev.db"
 FRONTEND_URL="http://localhost:3001"
 PORT=12345
 ```
@@ -61,9 +66,9 @@ PORT=12345
 
 ```bash
 cd apps/backend
-pnpm exec prisma generate  # Generate Prisma client
 pnpm exec prisma migrate dev  # Run migrations
-pnpm exec prisma db seed  # Seed the database with initial data
+pnpm exec prisma generate  # Generate Prisma client
+pnpm seed  # Seed the database with initial data
 ```
 
 5.Start the development servers:
