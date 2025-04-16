@@ -19,11 +19,11 @@ updates:
         update-types:
           ["version-update:semver-major", "version-update:semver-minor"]
 
-  # /apps/web
+  # /apps/frontend
   - package-ecosystem: "npm"
-    directory: "/apps/web"
+    directory: "/apps/frontend"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     allow:
       - dependency-type: "all"
     open-pull-requests-limit: 10
@@ -41,9 +41,9 @@ updates:
 
   # /apps/docs
   - package-ecosystem: "npm"
-    directory: "/apps/docs"
+    directory: "/apps/backend"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     allow:
       - dependency-type: "all"
     open-pull-requests-limit: 10
@@ -63,7 +63,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/packages/ui"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     allow:
       - dependency-type: "all"
     open-pull-requests-limit: 10
@@ -83,7 +83,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/packages/utils"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     allow:
       - dependency-type: "all"
     open-pull-requests-limit: 10
