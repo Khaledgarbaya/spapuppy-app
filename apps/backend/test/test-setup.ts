@@ -3,6 +3,14 @@ import { execSync } from 'child_process';
 import { join } from 'path';
 import * as dotenv from 'dotenv';
 
+// Generate Prisma client before running tests
+execSync('npx prisma generate', {
+  env: {
+    ...process.env,
+    DATABASE_URL: 'file:./test.db',
+  },
+});
+
 // This will be called once before all test files are executed
 export default async function setup() {
   // Load test environment variables
