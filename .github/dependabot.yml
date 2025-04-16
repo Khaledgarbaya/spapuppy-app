@@ -4,7 +4,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     allow:
       - dependency-type: "all"
     open-pull-requests-limit: 10
@@ -16,7 +16,8 @@ updates:
       - "dependencies"
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+        update-types:
+          ["version-update:semver-major", "version-update:semver-minor"]
 
   # /apps/web
   - package-ecosystem: "npm"
@@ -35,7 +36,8 @@ updates:
       - "web"
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+        update-types:
+          ["version-update:semver-major", "version-update:semver-minor"]
 
   # /apps/docs
   - package-ecosystem: "npm"
@@ -54,7 +56,8 @@ updates:
       - "docs"
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+        update-types:
+          ["version-update:semver-major", "version-update:semver-minor"]
 
   # /packages/ui
   - package-ecosystem: "npm"
@@ -73,7 +76,8 @@ updates:
       - "ui"
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+        update-types:
+          ["version-update:semver-major", "version-update:semver-minor"]
 
   # /packages/utils
   - package-ecosystem: "npm"
@@ -92,7 +96,8 @@ updates:
       - "utils"
     ignore:
       - dependency-name: "*"
-        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+        update-types:
+          ["version-update:semver-major", "version-update:semver-minor"]
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
