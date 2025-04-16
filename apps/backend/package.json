@@ -44,7 +44,7 @@
     "prettier": "^3.4.2",
     "prisma": "5.7.1",
     "supertest": "^7.1.0",
-    "ts-jest": "^29.1.2",
+    "ts-jest": "^29.1.5",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.7.0",
